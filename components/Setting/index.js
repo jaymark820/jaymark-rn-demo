@@ -1,37 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
+import { useSelector, useDispatch } from '../../store/index';
 
 const Setting = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
-  const getData = async () => {
-    try {
-      let response = await fetch(
-        'https://facebook.github.io/react-native/movies.json'
-      );
-      let responseJson = await response.json();
-      return responseJson;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  const dispatch = useDispatch();
+  const data = useSelector(({ demo }) => demo.data);
+  const loading = useSelector(({ demo }) => demo.loading);
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', async () => {
-      setLoading(true);
-      const data = await getData();
-      setTimeout(() => {
-        setData(data || null);
-        setLoading(false);
-      }, 250);
+    const unsubscribeFocus = navigation.addListener('focus', async () => {
+      dispatch({
+        type: 'demo/getData'
+      });
     });
 
-    const unsubscribe2 = navigation.addListener('blur', async () => {
-      setData(null);
+    const unsubscribeBlur = navigation.addListener('blur', async () => {
+      dispatch({
+        type: 'demo/resetData'
+      });
     });
     return () => {
-      unsubscribe();
-      unsubscribe2();
+      unsubscribeFocus();
+      unsubscribeBlur();
     };
   }, [navigation]);
 
@@ -44,7 +33,7 @@ const Setting = ({ navigation }) => {
     }
     return (
       <View>
-        <Text>下面数据从接口返回：https://facebook.github.io/react-native/movies.json</Text>
+        <Text>以下数据从接口返回：https://facebook.github.io/react-native/movies.json</Text>
         <Text>标题： {data.title}</Text>
         <Text>描述： {data.description}</Text>
         <Text>电影个数： {(data.movies || []).length}</Text>

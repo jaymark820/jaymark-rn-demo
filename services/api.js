@@ -1,3 +1,9 @@
+export async function getData() {
+  return fetch(
+    'https://facebook.github.io/react-native/movies.json'
+  ).then(resp => resp.json());
+}
+
 // 获取列表
 export async function getList() {
   return Promise.resolve({

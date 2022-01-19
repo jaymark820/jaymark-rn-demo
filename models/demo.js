@@ -1,12 +1,19 @@
+import { getData } from '../services/api';
+
 export default {
   namespace: 'demo',
   state: {
-    foo: 'bar',
+    loading: false,
+    data: null,
   },
   processor: {
-    // update foo
-    updateFoo: async ({ payload = {} }, { setState }) => {
-      setState({ foo: payload.foo });
+    getData: async ({ payload = {} }, { setState }) => {
+      setState({ loading: true });
+      const data = await getData();
+      setState({ data: data || null, loading: false });
+    },
+    resetData: ({}, { setState }) => {
+      setState({ data: null });
     },
   },
 };
