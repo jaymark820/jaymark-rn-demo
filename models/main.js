@@ -26,6 +26,21 @@ export default {
         callback(list);
       }
     },
+    deleteOne: async (
+      { payload: { id }, callback },
+      { setState, select, dispatch }
+    ) => {
+      const list = select((state) => state.list);
+      setState({ list: list.filter(item => item.id !== id) });
+    },
+    addOne: async (
+      { payload: { name }, callback },
+      { setState, select, dispatch }
+    ) => {
+      const list = select((state) => state.list);
+      const maxId = Math.max(...list.map(item => item.id));
+      setState({ list: [...list, { id: maxId + 1, name }] });
+    },
     removeAll: ({ payload }, { setState }) => setState({ list: [] }),
     updateSomeItem: ({ payload = {} }, { select, setState }) => {
       const list = select((state) => state.list);
