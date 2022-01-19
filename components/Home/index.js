@@ -63,8 +63,6 @@ const Home = () => {
     )
   };
 
-  console.log('list', list);
-
   return (
     <SafeAreaView style={styles.scrollView}>
       <FlatList
@@ -103,9 +101,11 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   item: {
-    backgroundColor: '#f5f5d5',
+    backgroundColor: '#fff',
     padding: 10,
-    marginBottom: 2
+    marginBottom: 2,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1
   },
   title: {
     fontSize: 20,
